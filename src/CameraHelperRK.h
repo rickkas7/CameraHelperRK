@@ -8,6 +8,12 @@
 
 #include <deque>
 
+#if defined(PLATFORM_TRACKER)
+# if PLATFORM_ID == PLATFORM_TRACKER
+#define HAS_TRACKER
+# endif
+#endif
+
 class CameraHelper {
 public:
     CameraHelper(USARTSerial &serial, int baud, int resetPin = -1);
@@ -23,6 +29,7 @@ public:
      */
     void loop();
 
+#ifdef HAS_TRACKER
     /**
      * @brief Call from setup() to enable cloud configuration of settings
      * 
@@ -30,6 +37,7 @@ public:
      * done after Tracker::instance().init().
      */
     void setupCloudConfig();
+#endif // HAS_TRACKER
 
     /**
      * @brief Take a picture, save, and upload it when possible
@@ -129,6 +137,8 @@ protected:
     bool publishDone = false;
 };
 
+
+#ifdef HAS_TRACKER
 /**
  * @brief Class for CameraHelper on the Tracker One
  * 
@@ -158,5 +168,6 @@ public:
 
 
 };
+#endif // HAS_TRACKER
 
 #endif /* __CAMERAHELPER_RK_H */

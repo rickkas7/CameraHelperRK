@@ -4,8 +4,10 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#ifdef HAS_TRACKER
 #include "tracker.h"
 #include "tracker_config.h"
+#endif
 
 // Required Libraries: uCamIII and Base64RK
 #include "Base64RK.h"
@@ -40,6 +42,7 @@ void CameraHelper::loop() {
     }
 }
 
+#ifdef HAS_TRACKER
 void CameraHelper::setupCloudConfig() {
     // Set up configuration settings
     static ConfigObject ucamDesc("ucam", {
@@ -50,6 +53,7 @@ void CameraHelper::setupCloudConfig() {
     });
     Tracker::instance().configService.registerModule(ucamDesc);
 }
+#endif // HAS_TRACKER
 
 
 void CameraHelper::stateScanDir() {
@@ -679,7 +683,7 @@ bool CameraHelper::createDirIfNecessary(const char *path) {
     }
 }
 
-
+#ifdef HAS_TRACKER
 CameraHelperTracker::CameraHelperTracker(USARTSerial &serial, int baud, int resetPin) : CameraHelper(serial, baud, resetPin) {
 
 }
@@ -694,3 +698,4 @@ void CameraHelperTracker::powerControl(bool on) {
     pinMode(CAN_PWR, OUTPUT);
     digitalWrite(CAN_PWR, on ? HIGH : LOW);
 }
+#endif // HAS_TRACKER
